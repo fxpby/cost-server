@@ -36,7 +36,7 @@ class UserController extends Controller {
       password,
       signature: '今天天气不错，设置一下个性签名吧',
       avatar: deafultAvatar,
-      ctime: new Date(),
+      ctime: new Date().getTime(),
     });
 
     if (result) {
