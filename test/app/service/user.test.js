@@ -1,5 +1,6 @@
 'use strict';
 
+  // getUserByName
 const { app, assert } = require('egg-mock/bootstrap');
 
 const deafultAvatar = 'https://fxpby.oss-cn-beijing.aliyuncs.com/project/egg-cost/avatar.jpg';
