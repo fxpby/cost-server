@@ -1,5 +1,7 @@
 # cost-server
 
+[![codecov](https://codecov.io/gh/fxpby/cost-server/branch/master/graph/badge.svg?token=CDL3IOSUKT)](https://codecov.io/gh/fxpby/cost-server)
+
 cost server use egg.js
 
 ## QuickStart
