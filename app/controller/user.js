@@ -9,7 +9,7 @@ class UserController extends Controller {
     const { username, password } = ctx.request.body;
 
     // 判断用户名/密码是否为空
-    if (!username || !password) {
+    if (!username || username === '' || !password || password === '') {
       ctx.body = {
         code: 500,
         msg: '不能填写空值哦',
