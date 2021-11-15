@@ -106,21 +106,21 @@ class UserController extends Controller {
     };
   }
 
-  // async decodeToken() {
-  //   const { ctx, app } = this;
-  //   // 通过 token 解析，拿到 user_id
-  //   const token = ctx.request.header.authorization;
-  //   // 通过 app.jwt.verify + 加密字符串 解析出 token 值
-  //   const decode = await app.jwt.verify(token, app.config.jwt.secret);
-  //   // 响应接口
-  //   ctx.body = {
-  //     code: 200,
-  //     msg: '获取 token 成功',
-  //     data: {
-  //       ...decode,
-  //     },
-  //   };
-  // }
+  async decodeToken() {
+    const { ctx, app } = this;
+    // 通过 token 解析，拿到 user_id
+    const token = ctx.request.header.authorization;
+    // 通过 app.jwt.verify + 加密字符串 解析出 token 值
+    const decode = await app.jwt.verify(token, app.config.jwt.secret);
+    // 响应接口
+    ctx.body = {
+      code: 200,
+      msg: '获取 token 成功',
+      data: {
+        ...decode,
+      },
+    };
+  }
 }
 
 module.exports = UserController;
