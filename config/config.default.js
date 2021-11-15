@@ -27,6 +27,11 @@ module.exports = appInfo => {
     domainWhiteList: [ '*' ],
   };
 
+  // 自定义加密字符串
+  config.jwt = {
+    secret: 'fxpby',
+  };
+
   exports.mysql = {
     // 单数据库信息配置
     client: {
