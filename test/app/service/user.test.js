@@ -20,11 +20,8 @@ describe('test/app/service/user.test.js', () => {
   // 通过用户名获取用户信息失败
   it('getUserByName failed', async () => {
     const ctx = app.mockContext();
-    try {
-      await ctx.service.user.getUserByName('这是一个啥');
-    } catch (err) {
-      assert(err === null);
-    }
+    const result = await ctx.service.user.getUserByName({ a: 1 });
+    assert(result === null);
   });
 
   // 注册成功
