@@ -117,4 +117,16 @@ describe('test/app/controller/user.test.js', () => {
       });
   });
 
+  it('get /api/user/decodeToken 解析token', () => {
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJPbHUiLCJleHAiOjE2MzcxMDg0MjksImlhdCI6MTYzNzAyMjAyOX0.oJK46d25BrF6mk9BKJYvc2DG70chahwAIF_fHXbczgw';
+    return app.httpRequest()
+      .get('/api/user/decodeToken')
+      .set('authorization', token)
+      .expect(200)
+      .then(response => {
+        const res = JSON.parse(response.text);
+        assert.equal(res.code, 200);
+      });
+  });
+
 });
