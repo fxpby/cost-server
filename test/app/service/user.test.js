@@ -1,6 +1,6 @@
 'use strict';
 
-// getUserByName
+const dayjs = require('dayjs');
 const { app, assert } = require('egg-mock/bootstrap');
 
 const deafultAvatar = 'https://fxpby.oss-cn-beijing.aliyuncs.com/project/egg-cost/avatar.jpg';
@@ -32,7 +32,7 @@ describe('test/app/service/user.test.js', () => {
       password: '123456',
       signature: '今天天气不错，设置一下个性签名吧',
       avatar: deafultAvatar,
-      ctime: new Date().getTime(),
+      ctime: dayjs().format(),
     });
     assert(result !== null);
   });
@@ -46,7 +46,7 @@ describe('test/app/service/user.test.js', () => {
         password: '123456',
         signature: '今天天气不错，设置一下个性签名吧',
         avatar: deafultAvatar,
-        ctime: new Date().getTime(),
+        ctime: dayjs().format(),
       });
     } catch (err) {
       assert(err === null);

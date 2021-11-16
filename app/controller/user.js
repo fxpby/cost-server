@@ -1,5 +1,6 @@
 'use strict';
 
+const dayjs = require('dayjs');
 const Controller = require('egg').Controller;
 const deafultAvatar = 'https://fxpby.oss-cn-beijing.aliyuncs.com/project/egg-cost/avatar.jpg';
 
@@ -37,7 +38,7 @@ class UserController extends Controller {
       password,
       signature: '今天天气不错，设置一下个性签名吧',
       avatar: deafultAvatar,
-      ctime: new Date().getTime(),
+      ctime: dayjs().format(),
     });
 
     if (result) {
