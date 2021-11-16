@@ -11,4 +11,5 @@ module.exports = app => {
   router.post('/api/user/register', controller.user.register);
   router.post('/api/user/login', controller.user.login);
   router.get('/api/user/decodeToken', _jwt, controller.user.decodeToken);
+  router.get('/api/user/getUserInfo', _jwt, controller.user.getUserInfo);
 };
