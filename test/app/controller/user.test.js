@@ -165,4 +165,21 @@ describe('test/app/controller/user.test.js', () => {
       });
   });
 
+  it('get /api/user/getUserInfo 获取用户信息成功', () => {
+    const token = app.jwt.sign({
+      id: '2',
+      username: 'olu-test-1636968127297',
+      exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60), // token 有效期为 24 小时
+    }, app.config.jwt.secret);
+
+    return app.httpRequest()
+      .get('/api/user/getUserInfo')
+      .set('authorization', token)
+      .expect(200)
+      .then(response => {
+        const res = JSON.parse(response.text);
+        assert.equal(res.code, 200);
+      });
+  });
+
 });
