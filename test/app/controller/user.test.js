@@ -153,7 +153,7 @@ describe('test/app/controller/user.test.js', () => {
     }, 2000);
   });
 
-  it.only('get /api/user/decodeToken token不存在', () => {
+  it('get /api/user/decodeToken token不存在', () => {
     const token = 'null';
     return app.httpRequest()
       .get('/api/user/decodeToken')
