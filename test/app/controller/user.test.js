@@ -117,8 +117,13 @@ describe('test/app/controller/user.test.js', () => {
       });
   });
 
-  it('get /api/user/decodeToken 解析token', () => {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJPbHUiLCJleHAiOjE2MzcxMDg0MjksImlhdCI6MTYzNzAyMjAyOX0.oJK46d25BrF6mk9BKJYvc2DG70chahwAIF_fHXbczgw';
+  it('get /api/user/decodeToken 解析token成功', () => {
+    const token = app.jwt.sign({
+      id: '2',
+      username: 'olu-test-1636968127297',
+      exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60), // token 有效期为 24 小时
+    }, app.config.jwt.secret);
+
     return app.httpRequest()
       .get('/api/user/decodeToken')
       .set('authorization', token)
@@ -126,6 +131,37 @@ describe('test/app/controller/user.test.js', () => {
       .then(response => {
         const res = JSON.parse(response.text);
         assert.equal(res.code, 200);
+      });
+  });
+
+  it('get /api/user/decodeToken token过期', () => {
+    const token = app.jwt.sign({
+      id: '2',
+      username: 'olu-test-1636968127297',
+      exp: Math.floor(Date.now() / 1000) + (1), // token 有效期为 1s
+    }, app.config.jwt.secret);
+
+    setTimeout(() => {
+      return app.httpRequest()
+        .get('/api/user/decodeToken')
+        .set('authorization', token)
+        .expect(200)
+        .then(response => {
+          const res = JSON.parse(response.text);
+          assert.equal(res.code, 401);
+        });
+    }, 2000);
+  });
+
+  it.only('get /api/user/decodeToken token不存在', () => {
+    const token = 'null';
+    return app.httpRequest()
+      .get('/api/user/decodeToken')
+      .set('authorization', token)
+      .expect(200)
+      .then(response => {
+        const res = JSON.parse(response.text);
+        assert.equal(res.code, 401);
       });
   });
 
