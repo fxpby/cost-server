@@ -38,7 +38,7 @@ class UserController extends Controller {
       password,
       signature: '今天天气不错，设置一下个性签名吧',
       avatar: deafultAvatar,
-      ctime: dayjs().format(),
+      ctime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     });
 
     if (result) {
@@ -152,24 +152,24 @@ class UserController extends Controller {
 
     const { signature = '' } = ctx.request.body;
 
-    try {
-      const token = ctx.request.header.authorization;
+    const token = ctx.request.header.authorization;
 
-      const decode = await app.jwt.verify(token, app.config.jwt.secret);
+    const decode = await app.jwt.verify(token, app.config.jwt.secret);
 
-      if (!decode) {
-        return;
-      }
+    if (!decode) {
+      return;
+    }
 
-      const userId = decode.id;
+    const userId = decode.id;
 
-      const userInfo = await ctx.service.user.getUserByName(decode.username);
+    const userInfo = await ctx.service.user.getUserByName(decode.username);
 
-      await ctx.service.user.editUserInfo({
-        ...userInfo,
-        signature,
-      });
+    const result = await ctx.service.user.editUserInfo({
+      ...userInfo,
+      signature,
+    });
 
+    if (result) {
       ctx.body = {
         code: 200,
         msg: '修改成功',
@@ -179,8 +179,7 @@ class UserController extends Controller {
           username: userInfo.username,
         },
       };
-    } catch (error) {
-      console.log(error);
+    } else {
       ctx.body = {
         code: 500,
         msg: '修改失败',
