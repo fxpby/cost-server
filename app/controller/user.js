@@ -156,10 +156,6 @@ class UserController extends Controller {
 
     const decode = await app.jwt.verify(token, app.config.jwt.secret);
 
-    if (!decode) {
-      return;
-    }
-
     const userId = decode.id;
 
     const userInfo = await ctx.service.user.getUserByName(decode.username);
