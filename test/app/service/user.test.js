@@ -32,7 +32,7 @@ describe('test/app/service/user.test.js', () => {
       password: '123456',
       signature: '今天天气不错，设置一下个性签名吧',
       avatar: deafultAvatar,
-      ctime: dayjs().format(),
+      ctime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     });
     assert(result !== null);
   });
@@ -46,7 +46,37 @@ describe('test/app/service/user.test.js', () => {
         password: '123456',
         signature: '今天天气不错，设置一下个性签名吧',
         avatar: deafultAvatar,
-        ctime: dayjs().format(),
+        ctime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      });
+    } catch (err) {
+      assert(err === null);
+    }
+  });
+
+  // 修改用户信息成功
+  it('editUserInfo success', async () => {
+    const ctx = app.mockContext();
+    const result = await ctx.service.user.editUserInfo({
+      username: 'Olu',
+      password: '123456',
+      signature: '今天天气不错，设置一下个性签名吧',
+      avatar: deafultAvatar,
+      ctime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      id: 1,
+    });
+    assert(result !== null);
+  });
+
+  // 修改用户信息失败
+  it('editUserInfo failed', async () => {
+    const ctx = app.mockContext();
+    try {
+      await ctx.service.user.editUserInfo({
+        username1: '',
+        password: '123456',
+        signature: '今天天气不错，设置一下个性签名吧',
+        avatar: deafultAvatar,
+        ctime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
       });
     } catch (err) {
       assert(err === null);
