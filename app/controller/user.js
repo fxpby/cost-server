@@ -163,9 +163,9 @@ class UserController extends Controller {
 
       const userId = decode.id;
 
-      const userInfo = ctx.service.user.getUserByName(decode.username);
+      const userInfo = await ctx.service.user.getUserByName(decode.username);
 
-      await ctx.service.editUserInfo({
+      await ctx.service.user.editUserInfo({
         ...userInfo,
         signature,
       });
@@ -180,6 +180,7 @@ class UserController extends Controller {
         },
       };
     } catch (error) {
+      console.log(error);
       ctx.body = {
         code: 500,
         msg: '修改失败',
