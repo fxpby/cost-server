@@ -145,6 +145,48 @@ class UserController extends Controller {
       },
     };
   }
+
+  // 修改用户信息
+  async editUserInfo() {
+    const { ctx, app } = this;
+
+    const { signature = '' } = ctx.request.body;
+
+    try {
+      const token = ctx.request.header.authorization;
+
+      const decode = await app.jwt.verify(token, app.config.jwt.secret);
+
+      if (!decode) {
+        return;
+      }
+
+      const userId = decode.id;
+
+      const userInfo = ctx.service.user.getUserByName(decode.username);
+
+      await ctx.service.editUserInfo({
+        ...userInfo,
+        signature,
+      });
+
+      ctx.body = {
+        code: 200,
+        msg: '修改成功',
+        data: {
+          id: userId,
+          signature,
+          username: userInfo.username,
+        },
+      };
+    } catch (error) {
+      ctx.body = {
+        code: 500,
+        msg: '修改失败',
+        data: null,
+      };
+    }
+  }
 }
 
 module.exports = UserController;
