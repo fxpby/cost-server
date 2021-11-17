@@ -32,6 +32,16 @@ module.exports = appInfo => {
     secret: 'fxpby',
   };
 
+  config.multipart = {
+    mode: 'file',
+  };
+
+  config.cors = {
+    origin: '*', // 允许所有跨域访问
+    credentials: true, // 允许 cookie 跨域
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
+  };
+
   exports.mysql = {
     // 单数据库信息配置
     client: {
@@ -55,6 +65,7 @@ module.exports = appInfo => {
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',
+    uploadDir: 'app/public/upload',
   };
 
   return {
