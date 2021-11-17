@@ -182,4 +182,44 @@ describe('test/app/controller/user.test.js', () => {
       });
   });
 
+  it('POST /api/user/editUserInfo 修改用户信息成功', () => {
+    const token = app.jwt.sign({
+      id: '2',
+      username: 'olu-test-1636968127297',
+      exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60), // token 有效期为 24 小时
+    }, app.config.jwt.secret);
+
+    return app.httpRequest()
+      .post('/api/user/editUserInfo')
+      .set('authorization', token)
+      .send({
+        signature: 'hhhhhhh',
+      })
+      .expect(200)
+      .then(response => {
+        const res = JSON.parse(response.text);
+        assert.equal(res.code, 200);
+      });
+  });
+
+  it('POST /api/user/editUserInfo 修改用户信息失败', () => {
+    const token = app.jwt.sign({
+      id: '2',
+      username: 'olu-test-1636968127297',
+      exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60), // token 有效期为 24 小时
+    }, app.config.jwt.secret);
+
+    return app.httpRequest()
+      .post('/api/user/editUserInfo')
+      .set('authorization', token)
+      .send({
+        signature: 'authorizationauthorizationauthorizationauthorizationauthorizationauthorizationauthorizationauthorizationauthorizationauthorizationauthorizationauthorizationauthorizationauthorization',
+      })
+      .expect(200)
+      .then(response => {
+        const res = JSON.parse(response.text);
+        assert.equal(res.code, 500);
+      });
+  });
+
 });
