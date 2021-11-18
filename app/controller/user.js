@@ -150,7 +150,7 @@ class UserController extends Controller {
   async editUserInfo() {
     const { ctx, app } = this;
 
-    const { signature = '' } = ctx.request.body;
+    const { signature = '', avatar = '' } = ctx.request.body;
 
     const token = ctx.request.header.authorization;
 
@@ -163,6 +163,7 @@ class UserController extends Controller {
     const result = await ctx.service.user.editUserInfo({
       ...userInfo,
       signature,
+      avatar,
     });
 
     if (result) {
@@ -173,6 +174,7 @@ class UserController extends Controller {
           id: userId,
           signature,
           username: userInfo.username,
+          avatar,
         },
       };
     } else {
