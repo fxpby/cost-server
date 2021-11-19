@@ -62,6 +62,13 @@ module.exports = appInfo => {
     agent: false,
   };
 
+  exports.customLoader = {
+    utils: {
+      directory: 'app/utils',
+      inject: 'app',
+    },
+  };
+
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',

@@ -44,19 +44,26 @@ class UploadController extends Controller {
 
   // 阿里云oss上传
   async uploadByAliOss() {
+    const { ctx, app } = this;
+
+    const ossConfig = await ctx.service.util.getOssConfig('ossConfig');
+
+    if (!ossConfig) {
+      return;
+    }
+
     const ossInfo = {
       // yourregion填写Bucket所在地域。以华东1（杭州）为例，Region填写为oss-cn-hangzhou。
-      region: 'oss-cn-beijing',
+      region: app.utils.crypto.aesDecrypt(ossConfig.region),
       // 阿里云账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM用户进行API访问或日常运维，请登录RAM控制台创建RAM用户。
-      accessKeyId: 'LTAI5tQSE9MDTm5K5hJYGvNE',
-      accessKeySecret: '2iFWRl628EOwzQWResYX9Jk5jOmCeg',
+      accessKeyId: app.utils.crypto.aesDecrypt(ossConfig.accessKeyId),
+      accessKeySecret: app.utils.crypto.aesDecrypt(ossConfig.accessKeySecret),
       // 填写Bucket名称。
-      bucket: 'fxpby',
+      bucket: app.utils.crypto.aesDecrypt(ossConfig.bucket),
     };
 
     const client = new OSS(ossInfo);
 
-    const { ctx } = this;
     const file = ctx.request.files[0];
 
     let result;
