@@ -1,8 +1,12 @@
 'use strict';
 
+const dayjs = require('dayjs');
+
 const Controller = require('egg').Controller;
 
 class BillController extends Controller {
+
+  // 新建账单
   async add() {
     const { ctx, app } = this;
     const { amount, type_id, date, pay_type, remark = '' } = await ctx.request.body;
@@ -43,6 +47,98 @@ class BillController extends Controller {
         msg: '服务器出差了呢',
         data: null,
       };
+    }
+  }
+
+  // 查询账单列表
+  async list() {
+    const { ctx, app } = this;
+    const { date, page = 1, page_size = 5, type_id = 'all' } = ctx.query;
+
+    try {
+      const token = ctx.request.header.authorization;
+      const decode = await app.jwt.verify(token, app.config.jwt.secret);
+      const user_id = decode.id;
+
+      const list = await ctx.service.bill.list(user_id);
+
+      // 过滤账单列表
+      const _list = list.filter(item => {
+        if (type_id === 'all') {
+          return dayjs(item.date).format('YYYY-MM') === date;
+        }
+        return dayjs(item.date).format('YYYY-MM') === date && type_id === item.type_id;
+      });
+
+      // 格式化数据结构
+      const listMap = _list.reduce((cur, item) => {
+        // 格式化账单时间
+        const date = dayjs(item.date).format('YYYY-MM-DD');
+
+        if (!cur.length) {
+          cur.push({
+            date,
+            bills: [ item ],
+          });
+
+        }
+
+        if (cur && cur.length && cur.findIndex(item => item.date === date) === -1) {
+          cur.push({
+            date,
+            bills: [ item ],
+          });
+        }
+
+        if (cur && cur.length && cur.findIndex(item => item.date === date) > -1) {
+          const index = cur.findIndex(item => item.date === date);
+          cur[index].bills.push(item);
+        }
+
+        return cur;
+      }, []).sort((a, b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf());
+
+      // 分页处理
+      const filterListMap = listMap.slice((page - 1) * page_size, page * page_size);
+
+      // 计算当月总收入和支出
+      const __list = list.filter(item => dayjs(item.date).format('YYYY-MM') === date);
+
+      // 累加支出
+      const totalExpense = __list.reduce((cur, item) => {
+        if (item.pay_type === '1') {
+          cur += Number(item.amount);
+          return cur;
+        }
+        return cur;
+      }, 0);
+
+      // 累加收入
+      const totalIncome = __list.reduce((cur, item) => {
+        if (item.pay_type === '2') {
+          cur += Number(item.amount);
+          return cur;
+        }
+        return cur;
+      }, 0);
+
+      ctx.body = {
+        code: 200,
+        msg: '获取账单列表成功',
+        data: {
+          totalExpense,
+          totalIncome,
+          totalPage: Math.ceil(listMap.length / page_size),
+          list: filterListMap || [],
+        },
+      };
+    } catch (error) {
+      ctx.body = {
+        code: 500,
+        msg: '服务器去输液了',
+        data: null,
+      };
+      return;
     }
   }
 }
