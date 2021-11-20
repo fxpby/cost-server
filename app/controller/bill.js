@@ -78,19 +78,19 @@ class BillController extends Controller {
         if (!cur.length) {
           cur.push({
             date,
-            bills: [ item ],
+            bills: [],
           });
 
         }
 
-        if (cur && cur.length && cur.findIndex(item => item.date === date) === -1) {
+        if (cur && cur.length && cur.findIndex(item => dayjs(item.date).format('YYYY-MM-DD') === date) === -1) {
           cur.push({
             date,
             bills: [ item ],
           });
         }
 
-        if (cur && cur.length && cur.findIndex(item => item.date === date) > -1) {
+        if (cur && cur.length && cur.findIndex(item => dayjs(item.date).format('YYYY-MM-DD') === date) > -1) {
           const index = cur.findIndex(item => item.date === date);
           cur[index].bills.push(item);
         }
