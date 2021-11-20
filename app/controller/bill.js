@@ -7,7 +7,7 @@ class BillController extends Controller {
     const { ctx, app } = this;
     const { amount, type_id, date, pay_type, remark = '' } = await ctx.request.body;
 
-    if (!amount || !type_id || !date || pay_type) {
+    if (!amount || !type_id || !date || !pay_type) {
       ctx.body = {
         code: 400,
         msg: '参数错误',
@@ -34,7 +34,7 @@ class BillController extends Controller {
         ctx.body = {
           code: 200,
           msg: '添加账单成功',
-          data: result,
+          data: null,
         };
       }
     } catch (error) {
