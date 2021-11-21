@@ -63,7 +63,7 @@ describe('test/app/service/bill.test.js', () => {
   });
 
   // 获取账单详情失败
-  it.only('detail failed', async () => {
+  it('detail failed', async () => {
     const ctx = app.mockContext();
     try {
       await ctx.service.bill.detail({});
