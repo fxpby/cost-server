@@ -106,7 +106,7 @@ class BillController extends Controller {
 
       // 累加支出
       const totalExpense = __list.reduce((cur, item) => {
-        if (item.pay_type === '1') {
+        if (item.pay_type === 1) {
           cur += Number(item.amount);
           return cur;
         }
@@ -115,7 +115,7 @@ class BillController extends Controller {
 
       // 累加收入
       const totalIncome = __list.reduce((cur, item) => {
-        if (item.pay_type === '2') {
+        if (item.pay_type === 2) {
           cur += Number(item.amount);
           return cur;
         }
