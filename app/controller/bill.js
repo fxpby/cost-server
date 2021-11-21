@@ -20,34 +20,34 @@ class BillController extends Controller {
       return;
     }
 
-    try {
-      const token = ctx.request.header.authorization;
-      const decode = await app.jwt.verify(token, app.config.jwt.secret);
-      const user_id = decode.id;
+    const token = ctx.request.header.authorization;
+    const decode = await app.jwt.verify(token, app.config.jwt.secret);
+    const user_id = decode.id;
 
-      const result = await ctx.service.bill.add({
-        amount,
-        type_id,
-        date,
-        pay_type,
-        remark,
-        user_id,
-      });
+    const result = await ctx.service.bill.add({
+      amount,
+      type_id,
+      date,
+      pay_type,
+      remark,
+      user_id,
+    });
 
-      if (result) {
-        ctx.body = {
-          code: 200,
-          msg: '添加账单成功',
-          data: null,
-        };
-      }
-    } catch (error) {
+    if (!result) {
       ctx.body = {
         code: 500,
         msg: '服务器出差了呢',
         data: null,
       };
+      return;
     }
+
+    ctx.body = {
+      code: 200,
+      msg: '添加账单成功',
+      data: null,
+    };
+
   }
 
   // 查询账单列表
