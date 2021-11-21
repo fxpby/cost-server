@@ -17,4 +17,5 @@ module.exports = app => {
   router.post('/api/uploadByAliOss', controller.upload.uploadByAliOss);
   router.post('/api/bill/add', _jwt, controller.bill.add);
   router.get('/api/bill/list', _jwt, controller.bill.list);
+  router.get('/api/bill/detail', _jwt, controller.bill.detail);
 };
