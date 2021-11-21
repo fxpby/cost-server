@@ -11,7 +11,7 @@ class BillController extends Controller {
     const { ctx, app } = this;
     const { amount, type_id, date, pay_type, remark = '' } = await ctx.request.body;
 
-    if (!amount || !type_id || !date || !pay_type) {
+    if (!amount || type_id === undefined || !date || pay_type === undefined) {
       ctx.body = {
         code: 400,
         msg: '参数错误',

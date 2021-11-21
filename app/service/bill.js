@@ -29,7 +29,7 @@ class BillService extends Service {
   }
 
   // 获取账单详情
-  async detail(params) {
+  async detail(params = {}) {
     const { app } = this;
     const { id, user_id } = params;
 
