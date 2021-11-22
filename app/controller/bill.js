@@ -179,7 +179,7 @@ class BillController extends Controller {
     const { ctx, app } = this;
     const { id, amount, type_id, date, pay_type, remark = '' } = ctx.request.body;
 
-    if (!amount || type_id === undefined || !date || pay_type === undefined) {
+    if (!id || !amount || type_id === undefined || !date || pay_type === undefined) {
       ctx.body = {
         code: 400,
         msg: '参数错误',
