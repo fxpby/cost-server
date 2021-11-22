@@ -174,6 +174,49 @@ class BillController extends Controller {
       };
     }
   }
+
+  async update() {
+    const { ctx, app } = this;
+    const { id, amount, type_id, date, pay_type, remark = '' } = ctx.request.body;
+
+    if (!amount || type_id === undefined || !date || pay_type === undefined) {
+      ctx.body = {
+        code: 400,
+        msg: '参数错误',
+        data: null,
+      };
+      return;
+    }
+
+    const token = ctx.request.header.authorization;
+    const decode = await app.jwt.verify(token, app.config.jwt.secret);
+    const user_id = decode.id;
+
+    const result = await ctx.service.bill.update({
+      id,
+      amount,
+      type_id,
+      date,
+      pay_type,
+      remark,
+      user_id,
+    });
+
+    if (!result) {
+      ctx.body = {
+        code: 500,
+        msg: '服务器出差了呢',
+        data: null,
+      };
+      return;
+    }
+
+    ctx.body = {
+      code: 200,
+      msg: '修改账单成功',
+      data: null,
+    };
+  }
 }
 
 module.exports = BillController;
