@@ -255,6 +255,79 @@ class BillController extends Controller {
       data: null,
     };
   }
+
+  async chartData() {
+    const { ctx, app } = this;
+    const { date = '' } = ctx.query;
+
+    const token = ctx.request.header.authorization;
+    const decode = await app.jwt.verify(token, app.config.jwt.secret);
+    const user_id = decode.id;
+
+    const result = await ctx.service.bill.list(user_id);
+
+    if (!result) {
+      ctx.body = {
+        code: 500,
+        msg: '服务器出差了呢',
+        data: null,
+      };
+      return;
+    }
+
+    const start = dayjs(date).startOf('month').unix() * 1000;
+    const end = dayjs(date).endOf('month').unix() * 1000;
+    const data = result.filter(item => (dayjs(item.date).valueOf() > start && dayjs(item.date).valueOf() < end));
+
+    // 总支出
+    const total_expense = data.reduce((arr, cur) => {
+      if (cur.pay_type === 1) {
+        arr += Number(cur.amount);
+      }
+      return arr;
+    }, 0);
+
+    // 总支出
+    const total_income = data.reduce((arr, cur) => {
+      if (cur.pay_type === 2) {
+        arr += Number(cur.amount);
+      }
+      return arr;
+    }, 0);
+
+    let total_data = data.reduce((arr, cur) => {
+      const index = arr.findIndex(item => item.type_id === cur.type_id);
+      if (index === -1) {
+        arr.push({
+          type_id: cur.type_id,
+          pay_type: cur.pay_type,
+          number: Number(cur.amount),
+          type_name: cur.type_name,
+        });
+      }
+      if (index > -1) {
+        arr[index].number += Number(cur.amount);
+      }
+      return arr;
+    }, []);
+
+
+    total_data = total_data.map(item => {
+      item.number = Number(Number(item.number).toFixed(2));
+      return item;
+    });
+
+    ctx.body = {
+      code: 200,
+      msg: '请求成功',
+      data: {
+        total_expense: Number(total_expense).toFixed(2),
+        total_income: Number(total_income).toFixed(2),
+        total_data: total_data || [],
+      },
+    };
+
+  }
 }
 
 module.exports = BillController;
