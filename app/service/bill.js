@@ -17,8 +17,8 @@ class BillService extends Service {
   // 获取账单列表
   async list(id) {
     const { app } = this;
-    const QUERY_STR = 'id, pay_type, amount, date, type_id, remark';
-    const sql = `select ${QUERY_STR} from bill where user_id = ${id}`;
+    const QUERY_STR = 'bill.id, bill.pay_type, bill.amount, bill.date, bill.type_id, bill.remark, type.name as type_name';
+    const sql = `select ${QUERY_STR} from bill left join type on bill.type_id = type.id  where bill.user_id = ${id}`;
     try {
       const result = await app.mysql.query(sql);
       return result;
