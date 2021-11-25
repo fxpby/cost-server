@@ -71,4 +71,35 @@ describe('test/app/service/bill.test.js', () => {
       assert(error === null);
     }
   });
+
+  // 修改账单详情成功
+  it('update success', async () => {
+    const ctx = app.mockContext();
+    const result = await ctx.service.bill.update({
+      id: 1,
+      user_id: 1,
+      amount: 233,
+      type_id: 1,
+      date: dayjs().format('YYYY-MM-DD'),
+      pay_type: 1,
+    });
+    assert(result !== null);
+  });
+
+  // 修改账单详情失败
+  it('update failed', async () => {
+    const ctx = app.mockContext();
+    try {
+      await ctx.service.bill.update({
+        id: 1,
+        user_id: 1,
+        amount: 233,
+        type_id: 1,
+        date: dayjs(),
+        pay_type: 1,
+      });
+    } catch (error) {
+      assert(error === null);
+    }
+  });
 });
