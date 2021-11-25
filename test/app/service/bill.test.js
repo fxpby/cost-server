@@ -102,4 +102,27 @@ describe('test/app/service/bill.test.js', () => {
       assert(error === null);
     }
   });
+
+  // 删除账单成功
+  it('delete success', async () => {
+    const ctx = app.mockContext();
+    const result = await ctx.service.bill.delete({
+      id: 53,
+      user_id: 1,
+    });
+    assert(result !== null);
+  });
+
+  // 删除账单失败
+  it('delete failed', async () => {
+    const ctx = app.mockContext();
+    try {
+      await ctx.service.bill.delete({
+        id: 531,
+        user_id: 1,
+      });
+    } catch (error) {
+      assert(error === null);
+    }
+  });
 });
