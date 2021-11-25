@@ -59,9 +59,10 @@ class BillService extends Service {
   async delete(params = {}) {
     const { app } = this;
     try {
-      const result = await app.mysql.delete('bill', {
+      const result = await app.mysql.update('bill', {
         id: params.id,
         user_id: params.user_id,
+        is_deleted: 1,
       });
       return result;
     } catch (error) {
