@@ -136,7 +136,7 @@ describe('test/app/controller/bill.test.js', () => {
       });
   });
 
-  it.only('GET /api/bill/detail 查询账单详情失败', () => {
+  it('GET /api/bill/detail 查询账单详情失败', () => {
     const token = app.jwt.sign({
       id: '2',
       username: 'olu-test-1636968127297',
